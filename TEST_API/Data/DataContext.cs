@@ -11,6 +11,6 @@ namespace DarknessAwaits_API.Data
         {
             _configuration = configuration;
         }
-        public IDbConnection CreateConnection() => new SqlConnection(_configuration.GetConnectionString("AzureConnection"));
+        public IDbConnection CreateConnection() => new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
     }
 }
