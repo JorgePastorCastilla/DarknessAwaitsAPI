@@ -6,7 +6,7 @@
         public int user { get; set; }
         public int trys { get; set; }
         public int miliseconds { get; set; }
-        public bool complete{ get; set; } = false;
+        public int complete{ get; set; } = 0;
         public string date { get; set; } = string.Empty;
     }
 }

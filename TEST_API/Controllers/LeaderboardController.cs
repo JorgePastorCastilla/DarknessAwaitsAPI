@@ -19,7 +19,7 @@ namespace DarknessAwaits_API.Controllers
         }
 
         [HttpPost("InsertGame"), Authorize]
-        public async Task<ActionResult<Game>> InsertGameLevel1(Game game)
+        public async Task<ActionResult<Game>> InsertGameLevel(Game game)
         {
             var userId = int.Parse(User?.FindFirstValue(ClaimTypes.Sid));
             game.user = userId;

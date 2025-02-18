@@ -17,7 +17,7 @@ namespace DarknessAwaits_API.Services.Users
 
         public async Task<User> InsertUserAsync(User user)
         {
-            var query = "INSERT INTO User (username, email, password) VALUES (@username, @email, @password)" +
+            var query = "INSERT INTO [User] (username, email, password) VALUES (@username, @email, @password)" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -44,7 +44,7 @@ namespace DarknessAwaits_API.Services.Users
 
         public async Task<User?> GetUserAsync(string userEmail)
         {
-            var sql = "select id,username,Email,Password from User where email=@email";
+            var sql = "select id,username,Email,Password from [User] where email=@email";
             var parameters = new DynamicParameters();
             parameters.Add("email", userEmail);
             using var conn = _dataContext.CreateConnection();

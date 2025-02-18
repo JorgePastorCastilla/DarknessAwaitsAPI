@@ -17,13 +17,14 @@ namespace DarknessAwaits_API.Services.LeaderBoard
 
         public async Task<int> InsertGameAsync(Game game)
         {
-            var sql = "insert into Game (user, trys, miliseconds, complete) values " +
-                "(@user, 1, @miliseconds, false)";
+            var sql = "insert into [Game] ([user], trys, miliseconds, complete) values " +
+                "(@user, @trys, @miliseconds, @complete)";
             using var connection = _dataContext.CreateConnection();
-
             var parameters = new DynamicParameters();
             parameters.Add("user", game.user);
+            parameters.Add("trys", game.trys);
             parameters.Add("miliseconds", game.miliseconds);
+            parameters.Add("complete", game.complete);
             var rowsInserted = await connection.ExecuteAsync(sql, parameters);
             if (rowsInserted == 0)
             {
@@ -37,7 +38,7 @@ namespace DarknessAwaits_API.Services.LeaderBoard
 
         private async Task<int> GetLastInsertedGameIdAsync()
         {
-            var sql = "SELECT MAX(id) FROM Game";
+            var sql = "SELECT MAX(id) FROM [Game]";
             using var connection = _dataContext.CreateConnection();
             var id = await connection.QuerySingleAsync<int>(sql);
             if (id != 0)
@@ -49,14 +50,14 @@ namespace DarknessAwaits_API.Services.LeaderBoard
 
         public async Task<IEnumerable<Game>> GetClassification()
         {
-            String sql = "SELECT Game.id, Game.user, User.username,"
+            String sql = "SELECT [Game].id, [Game].[user], [User].username,"
                 + " Game.miliseconds, Game.date"
-                + " FROM Game INNER JOIN User ON Game.user = User.id"
-                + " INNER JOIN (SELECT Game.user, MAX(Game.miliseconds) AS MaxTime"
-                + " FROM Game"
-                + " GROUP BY Game.user) A ON Game.user=A.user AND Game.miliseconds = A.MaxTime"
-                + " WHERE User.id > 6"
-                + " ORDER BY Game.miliseconds DESC";
+                + " FROM [Game] INNER JOIN [User] ON [Game].[user] = [User].id"
+                + " INNER JOIN (SELECT [Game].[user], MAX([Game].miliseconds) AS MaxTime"
+                + " FROM [Game]"
+                + " GROUP BY [Game].[user]) A ON [Game].[user]=A.[user] AND [Game].miliseconds = A.MaxTime"
+                //+ " WHERE [User].id > 6"
+                + " ORDER BY [Game].miliseconds DESC";
             using var connection = _dataContext.CreateConnection();
             var games = await connection.QueryAsync<Game>(sql);
 
@@ -65,7 +66,7 @@ namespace DarknessAwaits_API.Services.LeaderBoard
 
         public async Task<int> DeleteGameAsync(int gameId)
         {
-            var sql = "DELETE FROM Game WHERE id=@id";
+            var sql = "DELETE FROM [Game] WHERE id=@id";
             using var connection = _dataContext.CreateConnection();
 
             var parameters = new DynamicParameters();
